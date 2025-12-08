@@ -95,14 +95,14 @@ Create an Android live wallpaper application that displays an animated sky backg
 **Solution**: Move noise generation to GPU using OpenGL ES and FastNoiseLite GLSL implementation.
 
 #### Sub-Phase 6.1: Setup and Infrastructure
-- [ ] Download FastNoiseLite GLSL code from GitHub (https://github.com/Auburn/FastNoiseLite/blob/master/GLSL/FastNoiseLite.glsl)
-- [ ] Add GLSL file to project (e.g., `app/src/main/res/raw/fastnoise_glsl.txt`)
-- [ ] Create new package: `com.example.cloudpaper.gl/`
-- [ ] Create `GLCloudRenderer.java` class implementing `GLSurfaceView.Renderer`
-- [ ] Research and decide on GLWallpaperService implementation:
+- [X] Download FastNoiseLite GLSL code from GitHub (https://github.com/Auburn/FastNoiseLite/blob/master/GLSL/FastNoiseLite.glsl)
+- [X] Add GLSL file to project (e.g., `app/src/main/res/raw/fastnoise_glsl.txt`)
+- [X] Create new package: `com.example.cloudpaper.gl/`
+- [X] Create `GLCloudRenderer.java` class implementing `GLSurfaceView.Renderer`
+- [X] Research and decide on GLWallpaperService implementation:
   - Option A: Use existing open-source GLWallpaperService library
   - Option B: Implement custom GLWallpaperService from scratch
-- [ ] Document choice and add any necessary dependencies to `build.gradle`
+- [X] Document choice and add any necessary dependencies to `build.gradle`
 
 #### Sub-Phase 6.2: Shader Creation
 - [ ] Create vertex shader (`vertex_shader.glsl`):

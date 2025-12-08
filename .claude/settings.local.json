@@ -4,7 +4,8 @@
       "Bash(./gradlew build:*)",
       "Bash(./gradlew assembleDebug:*)",
       "Bash(cat:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(java -version:*)"
     ],
     "deny": [],
     "ask": []
