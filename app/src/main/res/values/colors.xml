@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="sky_top">#1E3A8A</color>
+    <color name="sky_bottom">#BAE6FD</color>
+    <color name="cloud_white">#FFFFFF</color>
+    <color name="cloud_shadow">#E0E7FF</color>
+</resources>
