@@ -67,19 +67,14 @@ Create an Android live wallpaper application that displays an animated sky backg
 - [X] Build and deploy to actual device
 - [X] Test wallpaper installation and verify it displays on device (even if just solid color)
 
-### Phase 3: Sky Rendering
-- [ ] Implement sky background rendering
-- [ ] Create gradient effect (top to bottom: deep blue to light blue)
-- [ ] Deploy to device and test static sky display on both emulator and actual device
-
-### Phase 4: Noise-Based Cloud Generation
-- [ ] Implement or integrate Perlin/Simplex noise library
-- [ ] Create noise generation function that produces cloud-like patterns
-- [ ] Generate static cloud texture using noise (no time/offset parameters yet)
+### Phase 3: Noise-Based Cloud Generation
+- [X] Select noise generation library (selected FastNoiseLite)
+- [ ] Use OpenSimplex2S noise. Use 3D noise (X,Y will render the screen; Z will be time). Use 3 octaves of FBm Fractal.
 - [ ] Render noise-generated clouds over sky gradient
+- [ ] Use a threshhold to provide "clear sky" background.
 - [ ] Deploy to device and test static cloud display on both emulator and actual device
 
-### Phase 5: Procedural Animation
+### Phase 4: Procedural Animation
 - [ ] Implement animation loop with Handler (2 FPS / 500ms delay)
 - [ ] Add time parameter that increments each frame
 - [ ] Add offset/drift parameter for horizontal cloud movement
@@ -88,7 +83,7 @@ Create an Android live wallpaper application that displays an animated sky backg
 - [ ] Deploy to device and test animation on both emulator and actual device
 - [ ] Optimize performance and adjust frame rate if needed
 
-### Phase 6: Polish & Settings (Optional)
+### Phase 5: Polish & Settings (Optional)
 - [ ] Add user preferences
   - Animation speed (frame rate adjustment)
   - Drift speed (how fast clouds move horizontally)
@@ -98,7 +93,7 @@ Create an Android live wallpaper application that displays an animated sky backg
 - [ ] Implement SharedPreferences integration
 - [ ] Deploy and test settings on device
 
-### Phase 7: Testing & Deployment
+### Phase 6: Testing & Deployment
 - [ ] Test on multiple devices/screen sizes
 - [ ] Test battery impact and performance
 - [ ] Create app icon and preview image
