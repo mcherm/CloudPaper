@@ -60,12 +60,12 @@ Create an Android live wallpaper application that displays an animated sky backg
 - [X] Add necessary permissions to AndroidManifest.xml
 
 ### Phase 2: Basic Wallpaper Service
-- [ ] Create WallpaperService class
-- [ ] Implement Engine inner class
-- [ ] Handle surface lifecycle callbacks (onCreate, onSurfaceCreated, onSurfaceChanged, onSurfaceDestroyed, onVisibilityChanged)
-- [ ] Draw simple solid color background
-- [ ] Build and deploy to actual device
-- [ ] Test wallpaper installation and verify it displays on device (even if just solid color)
+- [X] Create WallpaperService class
+- [X] Implement Engine inner class
+- [X] Handle surface lifecycle callbacks (onCreate, onSurfaceCreated, onSurfaceChanged, onSurfaceDestroyed, onVisibilityChanged)
+- [X] Draw simple solid color background
+- [X] Build and deploy to actual device
+- [X] Test wallpaper installation and verify it displays on device (even if just solid color)
 
 ### Phase 3: Sky Rendering
 - [ ] Implement sky background rendering
