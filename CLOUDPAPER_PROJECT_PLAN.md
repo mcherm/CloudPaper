@@ -74,26 +74,29 @@ Create an Android live wallpaper application that displays an animated sky backg
 - [X] Use a threshhold to provide "clear sky" background.
 - [X] Deploy to device and test static cloud display on both emulator and actual device
 
-### Phase 4: Procedural Animation
-- [ ] Implement animation loop with Handler (2 FPS / 500ms delay)
-- [ ] Add time parameter that increments each frame
-- [ ] Add offset/drift parameter for horizontal cloud movement
-- [ ] Pass time and offset into noise generation function
-- [ ] Verify clouds evolve and drift organically
+### Phase 4: Procedural Animation (Evolution Over Time)
+- [ ] Implement animation loop with Handler. Create an adjustable FPS (default to 2 FPS)
+- [ ] Add time parameter that increments each frame. Base it on time passed, not frames rendered
+- [ ] Use time parameter to provide the z-position
 - [ ] Deploy to device and test animation on both emulator and actual device
-- [ ] Optimize performance and adjust frame rate if needed
 
-### Phase 5: Polish & Settings (Optional)
-- [ ] Add user preferences
-  - Animation speed (frame rate adjustment)
-  - Drift speed (how fast clouds move horizontally)
+### Phase 5: Procedural Animation (Drift)
+- [ ] Create a parameter for rate and direction of "drift" or "wind"
+- [ ] Default to a fairly low rate of drift in an east-south-east direction
+- [ ] Use the drift parameter to offset the x and y coordinates used in generateClouds()
+- [ ] Deploy to device and test animation on both emulator and actual device
+
+### Phase 6: Polish & Settings (Optional)
+- [ ] Add user preferences for each of the adjustable parameters, including
+  - Animation FPS (frame rate adjustment)
+  - Evolution time (how fast the Z parameter changes)
+  - Drift speed (how fast clouds move)
   - Cloud density/intensity (noise threshold adjustments)
-  - Sky color scheme (day/night/custom gradients)
 - [ ] Create settings activity
 - [ ] Implement SharedPreferences integration
 - [ ] Deploy and test settings on device
 
-### Phase 6: Testing & Deployment
+### Phase 7: Testing & Deployment
 - [ ] Test on multiple devices/screen sizes
 - [ ] Test battery impact and performance
 - [ ] Create app icon and preview image
