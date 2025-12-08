@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 
+import com.example.cloudpaper.AnimationSettings;
 import com.example.cloudpaper.noise.FastNoiseLite;
 
 /**
@@ -19,19 +20,17 @@ public class CloudRenderer {
     private int[] pixels;
     private int width;
     private int height;
+    private final AnimationSettings animationSettings;
 
-    // Noise parameters
-    private float noiseScale = 1.00f;  // Controls cloud size (smaller = bigger clouds)
-    private float threshold = 0.50f;     // Cloud density threshold (higher = fewer clouds)
-    private float zPosition = 0.0f;     // Z-axis position for 3D noise (for animation later)
+    public CloudRenderer(AnimationSettings animationSettings) {
+        this.animationSettings = animationSettings;
 
-    public CloudRenderer() {
         // Initialize FastNoiseLite with OpenSimplex2S and FBm
         noise = new FastNoiseLite();
         noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2S);
         noise.SetFractalType(FastNoiseLite.FractalType.FBm);
         noise.SetFractalOctaves(3);
-        noise.SetFrequency(0.005f);
+        noise.SetFrequency(animationSettings.noiseFrequency);
     }
 
     /**
@@ -52,7 +51,7 @@ public class CloudRenderer {
      * Generate cloud texture using 3D noise
      * Returns a bitmap with clouds rendered over transparent background
      */
-    public Bitmap generateClouds() {
+    public Bitmap generateClouds(final float z) {
         if (cloudBitmap == null) {
             Log.w("CloudPaper", "generateClouds: cloudBitmap is null!");
             return null;
@@ -64,17 +63,14 @@ public class CloudRenderer {
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                // Get 3D noise value (x, y, z) where z is static for now
-                float noiseValue = noise.GetNoise(
-                    x * noiseScale,
-                    y * noiseScale,
-                    zPosition
-                );
-
+                // Get 3D noise value (x, y, z) where x,y is screen coordinates and z is time
+                float noiseValue = noise.GetNoise(x,y,z);
 
                 // FIXME: This normalization might not be necessary if I set my threshold differently
                 // Normalize noise from [-1, 1] to [0, 1]
                 noiseValue = (noiseValue + 1.0f) / 2.0f;
+
+                final float threshold = animationSettings.cloudDensityThreshold;
 
                 // Apply threshold to create sparse clouds
                 if (noiseValue < threshold) {
@@ -101,35 +97,4 @@ public class CloudRenderer {
         return cloudBitmap;
     }
 
-    /**
-     * Set the noise scale (controls cloud size)
-     * Smaller values = larger clouds
-     */
-    public void setNoiseScale(float scale) {
-        this.noiseScale = scale;
-    }
-
-    /**
-     * Set the threshold (controls cloud density)
-     * Higher values = fewer, sparser clouds
-     * Range: 0.0 to 1.0
-     */
-    public void setThreshold(float threshold) {
-        this.threshold = threshold;
-    }
-
-    /**
-     * Set the Z position for 3D noise
-     * This will be used for animation in Phase 5
-     */
-    public void setZPosition(float z) {
-        this.zPosition = z;
-    }
-
-    /**
-     * Get the current cloud bitmap
-     */
-    public Bitmap getCloudBitmap() {
-        return cloudBitmap;
-    }
 }

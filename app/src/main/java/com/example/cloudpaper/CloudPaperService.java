@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Handler;
+import android.os.Looper;
 import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
 
@@ -28,21 +30,47 @@ public class CloudPaperService extends WallpaperService {
 
         private Paint skyPaint;
         private CloudRenderer cloudRenderer;
+        private AnimationSettings animationSettings;
+
         private int surfaceWidth;
         private int surfaceHeight;
         private boolean visible;
+
+        // Animation parameters
+        private Handler handler;
+        private Runnable drawRunnable;
+        private long frameDelayMs;
+        private long animationStartTime;
 
         @Override
         public void onCreate(SurfaceHolder surfaceHolder) {
             super.onCreate(surfaceHolder);
 
+            // Initialize the animationSettings
+            animationSettings = new AnimationSettings();
+
             // Initialize sky paint with solid color
             skyPaint = new Paint();
-            skyPaint.setColor(Color.parseColor("#55B4E1")); // Light blue background
+            skyPaint.setColor(Color.parseColor( animationSettings.skyColor));
             skyPaint.setStyle(Paint.Style.FILL);
 
             // Initialize cloud renderer
-            cloudRenderer = new CloudRenderer();
+            cloudRenderer = new CloudRenderer(animationSettings);
+
+            // Initialize animation
+            handler = new Handler(Looper.getMainLooper());
+            frameDelayMs = 1000 / animationSettings.framesPerSecond;
+            animationStartTime = System.currentTimeMillis();
+
+            drawRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    draw();
+                    if (visible) {
+                        handler.postDelayed(this, frameDelayMs);
+                    }
+                }
+            };
 
             visible = false;
         }
@@ -79,11 +107,11 @@ public class CloudPaperService extends WallpaperService {
             this.visible = visible;
 
             if (visible) {
-                // Wallpaper is visible - draw it
-                draw();
+                // Wallpaper is visible - start animation
+                handler.post(drawRunnable);
             } else {
-                // Wallpaper is not visible - no need to draw
-                // (Future: stop animation here to save battery)
+                // Wallpaper is not visible - stop animation to save battery
+                handler.removeCallbacks(drawRunnable);
             }
         }
 
@@ -91,13 +119,22 @@ public class CloudPaperService extends WallpaperService {
         public void onDestroy() {
             super.onDestroy();
             visible = false;
+            handler.removeCallbacks(drawRunnable);
         }
 
         /**
          * Draw the wallpaper with solid sky color and procedural clouds
          */
         private void draw() {
-            SurfaceHolder holder = getSurfaceHolder();
+            // Calculate elapsed time in seconds since animation started
+            final long currentTime = System.currentTimeMillis();
+            final float elapsedMillis = (float)(currentTime - animationStartTime);
+
+            // Use elapsed time as z-position for 3D noise, with a scale factor
+            // that controls how fast clouds evolve
+            final float zPosition = elapsedMillis * animationSettings.evolutionRate;
+
+            final SurfaceHolder holder = getSurfaceHolder();
             Canvas canvas = null;
 
             try {
@@ -107,7 +144,7 @@ public class CloudPaperService extends WallpaperService {
                     canvas.drawRect(0, 0, surfaceWidth, surfaceHeight, skyPaint);
 
                     // Generate and draw clouds
-                    Bitmap cloudBitmap = cloudRenderer.generateClouds();
+                    final Bitmap cloudBitmap = cloudRenderer.generateClouds(zPosition);
                     if (cloudBitmap != null) {
                         canvas.drawBitmap(cloudBitmap, 0, 0, null);
                     }

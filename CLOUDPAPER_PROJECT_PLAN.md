@@ -75,10 +75,10 @@ Create an Android live wallpaper application that displays an animated sky backg
 - [X] Deploy to device and test static cloud display on both emulator and actual device
 
 ### Phase 4: Procedural Animation (Evolution Over Time)
-- [ ] Implement animation loop with Handler. Create an adjustable FPS (default to 2 FPS)
-- [ ] Add time parameter that increments each frame. Base it on time passed, not frames rendered
-- [ ] Use time parameter to provide the z-position
-- [ ] Deploy to device and test animation on both emulator and actual device
+- [X] Implement animation loop with Handler. Create an adjustable FPS (default to 2 FPS)
+- [X] Add time parameter that increments each frame. Base it on time passed, not frames rendered
+- [X] Use time parameter to provide the z-position
+- [X] Deploy to device and test animation on both emulator and actual device
 
 ### Phase 5: Procedural Animation (Drift)
 - [ ] Create a parameter for rate and direction of "drift" or "wind"
