@@ -61,6 +61,30 @@ Builds the APK and installs it in one step (most commonly used).
 
 ---
 
+### `view-logs.sh`
+View real-time CloudPaper debug logs from the device/emulator.
+
+```bash
+./scripts/view-logs.sh
+```
+
+This shows all log messages from CloudPaper. Very useful for debugging! Press Ctrl+C to exit.
+
+**Prerequisites:** A device/emulator must be running
+
+---
+
+### `clear-logs.sh`
+Clear the Android log buffer.
+
+```bash
+./scripts/clear-logs.sh
+```
+
+Use this before testing to get a clean log view without old messages.
+
+---
+
 ## Typical Workflow
 
 ### First Time Setup

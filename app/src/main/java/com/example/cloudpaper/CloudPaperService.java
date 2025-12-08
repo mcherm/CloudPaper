@@ -1,16 +1,18 @@
 package com.example.cloudpaper;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
 
+import com.example.cloudpaper.renderer.CloudRenderer;
+
 /**
  * CloudPaper Live Wallpaper Service
  *
- * This service provides an animated sky wallpaper with moving clouds.
- * Phase 2: Basic wallpaper service with solid color background.
+ * <p>This service provides an animated sky wallpaper with moving clouds.
  */
 public class CloudPaperService extends WallpaperService {
 
@@ -24,7 +26,8 @@ public class CloudPaperService extends WallpaperService {
      */
     private class CloudPaperEngine extends Engine {
 
-        private Paint backgroundPaint;
+        private Paint skyPaint;
+        private CloudRenderer cloudRenderer;
         private int surfaceWidth;
         private int surfaceHeight;
         private boolean visible;
@@ -33,10 +36,13 @@ public class CloudPaperService extends WallpaperService {
         public void onCreate(SurfaceHolder surfaceHolder) {
             super.onCreate(surfaceHolder);
 
-            // Initialize the paint for the background
-            backgroundPaint = new Paint();
-            backgroundPaint.setColor(Color.parseColor("#55B4E1")); // Light blue color
-            backgroundPaint.setStyle(Paint.Style.FILL);
+            // Initialize sky paint with solid color
+            skyPaint = new Paint();
+            skyPaint.setColor(Color.parseColor("#55B4E1")); // Light blue background
+            skyPaint.setStyle(Paint.Style.FILL);
+
+            // Initialize cloud renderer
+            cloudRenderer = new CloudRenderer();
 
             visible = false;
         }
@@ -55,7 +61,10 @@ public class CloudPaperService extends WallpaperService {
             surfaceWidth = width;
             surfaceHeight = height;
 
-            // Redraw with new dimensions
+            // Update cloud renderer size
+            cloudRenderer.setSurfaceSize(width, height);
+
+            // Generate clouds and redraw
             draw();
         }
 
@@ -85,7 +94,7 @@ public class CloudPaperService extends WallpaperService {
         }
 
         /**
-         * Draw the wallpaper
+         * Draw the wallpaper with solid sky color and procedural clouds
          */
         private void draw() {
             SurfaceHolder holder = getSurfaceHolder();
@@ -94,8 +103,14 @@ public class CloudPaperService extends WallpaperService {
             try {
                 canvas = holder.lockCanvas();
                 if (canvas != null) {
-                    // Fill the entire canvas with light blue
-                    canvas.drawRect(0, 0, surfaceWidth, surfaceHeight, backgroundPaint);
+                    // Draw solid sky color
+                    canvas.drawRect(0, 0, surfaceWidth, surfaceHeight, skyPaint);
+
+                    // Generate and draw clouds
+                    Bitmap cloudBitmap = cloudRenderer.generateClouds();
+                    if (cloudBitmap != null) {
+                        canvas.drawBitmap(cloudBitmap, 0, 0, null);
+                    }
                 }
             } finally {
                 if (canvas != null) {
