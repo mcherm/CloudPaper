@@ -72,7 +72,7 @@ Create an Android live wallpaper application that displays an animated sky backg
 - [X] Use OpenSimplex2S noise. Use 3D noise (X,Y will render the screen; Z will be time). Use 3 octaves of FBm Fractal.
 - [X] Render noise-generated clouds over sky gradient
 - [X] Use a threshhold to provide "clear sky" background.
-- [ ] Deploy to device and test static cloud display on both emulator and actual device
+- [X] Deploy to device and test static cloud display on both emulator and actual device
 
 ### Phase 4: Procedural Animation
 - [ ] Implement animation loop with Handler (2 FPS / 500ms delay)
