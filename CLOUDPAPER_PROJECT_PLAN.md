@@ -81,12 +81,136 @@ Create an Android live wallpaper application that displays an animated sky backg
 - [X] Deploy to device and test animation on both emulator and actual device
 
 ### Phase 5: Procedural Animation (Drift)
-- [ ] Create a parameter for rate and direction of "drift" or "wind"
-- [ ] Default to a fairly low rate of drift in an east-south-east direction
-- [ ] Use the drift parameter to offset the x and y coordinates used in generateClouds()
-- [ ] Deploy to device and test animation on both emulator and actual device
+- [X] Create a parameter for rate and direction of "drift" or "wind"
+- [X] Default to a fairly low rate of drift in an east-south-east direction
+- [X] Use the drift parameter to offset the x and y coordinates used in generateClouds()
+- [X] Deploy to device and test animation on both emulator and actual device
 
-### Phase 6: Polish & Settings (Optional)
+### Phase 6: GPU-Based Cloud Generation (OpenGL ES + GLSL)
+
+**Goal**: Replace CPU-based noise generation with GPU rendering for dramatic performance improvement (target: <20ms per frame vs current ~1000ms)
+
+**Current Problem**: `generateClouds()` takes ~900-1000ms on device, making smooth animation impossible at any reasonable frame rate.
+
+**Solution**: Move noise generation to GPU using OpenGL ES and FastNoiseLite GLSL implementation.
+
+#### Sub-Phase 6.1: Setup and Infrastructure
+- [ ] Download FastNoiseLite GLSL code from GitHub (https://github.com/Auburn/FastNoiseLite/blob/master/GLSL/FastNoiseLite.glsl)
+- [ ] Add GLSL file to project (e.g., `app/src/main/res/raw/fastnoise_glsl.txt`)
+- [ ] Create new package: `com.example.cloudpaper.gl/`
+- [ ] Create `GLCloudRenderer.java` class implementing `GLSurfaceView.Renderer`
+- [ ] Research and decide on GLWallpaperService implementation:
+  - Option A: Use existing open-source GLWallpaperService library
+  - Option B: Implement custom GLWallpaperService from scratch
+- [ ] Document choice and add any necessary dependencies to `build.gradle`
+
+#### Sub-Phase 6.2: Shader Creation
+- [ ] Create vertex shader (`vertex_shader.glsl`):
+  - Simple pass-through shader for full-screen quad
+  - Pass texture coordinates to fragment shader
+- [ ] Create fragment shader (`fragment_shader.glsl`):
+  - Include/embed FastNoiseLite GLSL code
+  - Add uniform variables for time (z-position) and drift (x,y offsets)
+  - Implement threshold logic for cloud density
+  - Implement color mapping (sky blue background, white clouds with alpha)
+- [ ] Create shader loading utility in Java to read and compile shaders
+- [ ] Test shader compilation and catch/report any errors
+
+#### Sub-Phase 6.3: OpenGL Rendering Setup
+- [ ] Implement `GLCloudRenderer.onSurfaceCreated()`:
+  - Load and compile vertex and fragment shaders
+  - Create shader program
+  - Get uniform locations (uTime, uDriftX, uDriftY, resolution, etc.)
+  - Set up full-screen quad geometry (2 triangles)
+- [ ] Implement `GLCloudRenderer.onSurfaceChanged()`:
+  - Handle surface size changes
+  - Update viewport
+  - Pass screen resolution to shader
+- [ ] Implement `GLCloudRenderer.onDrawFrame()`:
+  - Update time and drift uniforms based on elapsed time
+  - Clear the screen
+  - Draw full-screen quad
+  - Handle any GL errors
+
+#### Sub-Phase 6.4: Integration with WallpaperService
+- [ ] Create new `GLCloudPaperService.java` (alternative to current service)
+- [ ] Integrate GLSurfaceView rendering with wallpaper lifecycle:
+  - Handle `onVisibilityChanged()` to pause/resume rendering
+  - Handle `onDestroy()` to clean up GL resources
+  - Connect animation loop to GL rendering
+- [ ] Pass AnimationSettings parameters to renderer:
+  - Sky color
+  - Evolution rate
+  - Drift rates
+  - Cloud density threshold
+  - Noise frequency
+
+#### Sub-Phase 6.5: Testing and Performance Validation
+- [ ] Build and deploy to emulator
+- [ ] Verify clouds render correctly
+- [ ] Test animation (evolution and drift)
+- [ ] Measure frame render time (should be <20ms)
+- [ ] Build and deploy to actual device
+- [ ] Re-verify rendering and animation on device
+- [ ] Measure device performance
+- [ ] Compare to CPU-based implementation (~1000ms → <20ms expected)
+
+#### Sub-Phase 6.6: Refinement and Cleanup
+- [ ] Adjust shader parameters if needed (octaves, frequency, threshold)
+- [ ] Optimize if any performance issues remain
+- [ ] Add error handling and fallback behavior
+- [ ] Update AndroidManifest.xml to use new GL-based service (or make it switchable)
+- [ ] Document GPU implementation in code comments
+- [ ] Consider keeping CPU implementation as fallback for older devices
+- [ ] Update README/docs with GPU approach details
+
+#### Sub-Phase 6.7: Rollback Decision Point
+- [ ] **DECISION**: If GPU implementation successful (good performance, acceptable complexity):
+  - Keep GPU implementation
+  - Mark CPU implementation as deprecated or remove it
+  - Proceed to Phase 7
+- [ ] **DECISION**: If GPU implementation problematic (bugs, too complex, or unexpected issues):
+  - Rollback to CPU implementation
+  - Try CPU-based optimizations instead:
+    - Lower resolution rendering
+    - Reduce octaves
+    - Simplify noise function
+    - Use lookup tables
+  - Re-evaluate GPU approach later
+
+#### Key Files to Create/Modify:
+- **New**: `app/src/main/res/raw/fastnoise_glsl.txt` (FastNoiseLite GLSL code)
+- **New**: `app/src/main/res/raw/vertex_shader.glsl` (vertex shader)
+- **New**: `app/src/main/res/raw/fragment_shader.glsl` (fragment shader with noise + cloud logic)
+- **New**: `app/src/main/java/com/example/cloudpaper/gl/GLCloudRenderer.java` (OpenGL renderer)
+- **New**: `app/src/main/java/com/example/cloudpaper/gl/ShaderUtils.java` (shader loading utilities)
+- **New**: `app/src/main/java/com/example/cloudpaper/GLCloudPaperService.java` (GL-based wallpaper service)
+- **Modified**: `app/build.gradle` (if adding GLWallpaperService dependency)
+- **Modified**: `app/src/main/AndroidManifest.xml` (switch to GL service or make switchable)
+
+#### Resources:
+- FastNoiseLite GLSL: https://github.com/Auburn/FastNoiseLite/blob/master/GLSL/FastNoiseLite.glsl
+- Android OpenGL ES Guide: https://developer.android.com/develop/ui/views/graphics/opengl
+- GLWallpaperService examples: Search GitHub for "GLWallpaperService Android"
+- The Book of Shaders: https://thebookofshaders.com/ (GLSL learning resource)
+
+#### Expected Outcome:
+- Smooth 60 FPS cloud animation (or configurable FPS)
+- Frame render time: 10-20ms (vs current 900-1000ms)
+- Acceptable battery usage (GPU designed for this work)
+- Clean, maintainable GL implementation
+
+#### Risks and Mitigation:
+- **Risk**: OpenGL complexity causes implementation issues
+  - **Mitigation**: Use well-tested GLWallpaperService library, follow examples closely
+- **Risk**: GLSL debugging is difficult
+  - **Mitigation**: Test shader in isolation first (e.g., Shadertoy), add error handling
+- **Risk**: Older devices may not support required GL features
+  - **Mitigation**: Keep CPU fallback implementation, detect GL capabilities at runtime
+- **Risk**: Time investment too high
+  - **Mitigation**: Set timebox (e.g., 4-6 hours), be ready to rollback to CPU optimizations
+
+### Phase 7: Polish & Settings (Optional)
 - [ ] Add user preferences for each of the adjustable parameters, including
   - Animation FPS (frame rate adjustment)
   - Evolution time (how fast the Z parameter changes)
@@ -96,7 +220,7 @@ Create an Android live wallpaper application that displays an animated sky backg
 - [ ] Implement SharedPreferences integration
 - [ ] Deploy and test settings on device
 
-### Phase 7: Testing & Deployment
+### Phase 8: Testing & Deployment
 - [ ] Test on multiple devices/screen sizes
 - [ ] Test battery impact and performance
 - [ ] Create app icon and preview image
