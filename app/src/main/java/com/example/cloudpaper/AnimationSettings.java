@@ -7,7 +7,7 @@ package com.example.cloudpaper;
 public class AnimationSettings {
 
     /** Number of frames per second controls how often we re-draw the screen. */
-    public final int framesPerSecond = 8;
+    public final int framesPerSecond = 4;
 
     /** Controls the base color of the sky. */
     public final String skyColor = "#55B4E1";  // Light blue background
@@ -20,4 +20,10 @@ public class AnimationSettings {
 
     /** Controls cloud density. Higher values = fewer, sparser clouds. Range: 0.0 to 1.0 */
     public final float cloudDensityThreshold = 0.50f;
+
+    /** Horizontal drift rate (positive = drift east/right). Default is slow drift eastward. */
+    public final float driftX = 0.005f;
+
+    /** Vertical drift rate (positive = drift south/down). Default is slow drift southward. */
+    public final float driftY = 0.001f;
 }

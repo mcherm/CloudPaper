@@ -50,21 +50,24 @@ public class CloudRenderer {
     /**
      * Generate cloud texture using 3D noise
      * Returns a bitmap with clouds rendered over transparent background
+     *
+     * @param xOffset X-offset for horizontal drift
+     * @param yOffset Y-offset for vertical drift
+     * @param zOffset Z-position for evolution over time
      */
-    public Bitmap generateClouds(final float z) {
+    public Bitmap generateClouds(final float xOffset, final float yOffset, final float zOffset) {
         if (cloudBitmap == null) {
             Log.w("CloudPaper", "generateClouds: cloudBitmap is null!");
             return null;
         }
 
-        Log.d("CloudPaper", "generateClouds: Starting generation for " + width + "x" + height);
-
         int index = 0;
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                // Get 3D noise value (x, y, z) where x,y is screen coordinates and z is time
-                float noiseValue = noise.GetNoise(x,y,z);
+                // Get 3D noise value with drift offsets applied
+                // x,y is screen coordinates (with drift), z is time
+                float noiseValue = noise.GetNoise(x - xOffset, y - yOffset, zOffset);
 
                 // FIXME: This normalization might not be necessary if I set my threshold differently
                 // Normalize noise from [-1, 1] to [0, 1]

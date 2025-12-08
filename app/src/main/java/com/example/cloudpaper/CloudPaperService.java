@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Looper;
 import android.service.wallpaper.WallpaperService;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 import com.example.cloudpaper.renderer.CloudRenderer;
@@ -41,6 +42,7 @@ public class CloudPaperService extends WallpaperService {
         private Runnable drawRunnable;
         private long frameDelayMs;
         private long animationStartTime;
+        private long lastFrameMillis; // FIXME: Remove this
 
         @Override
         public void onCreate(SurfaceHolder surfaceHolder) {
@@ -65,8 +67,13 @@ public class CloudPaperService extends WallpaperService {
             drawRunnable = new Runnable() {
                 @Override
                 public void run() {
+                    long newTimeMillis = System.currentTimeMillis();
+                    long elapsedMillis = newTimeMillis - lastFrameMillis;
+                    lastFrameMillis = newTimeMillis;
+                    Log.d("CloudPaper", "Beginning new run just " + elapsedMillis + " millis later.");
                     draw();
                     if (visible) {
+                        Log.d("CloudPaper", "Will schedule to run again in " + frameDelayMs + "ms");
                         handler.postDelayed(this, frameDelayMs);
                     }
                 }
@@ -126,32 +133,49 @@ public class CloudPaperService extends WallpaperService {
          * Draw the wallpaper with solid sky color and procedural clouds
          */
         private void draw() {
-            // Calculate elapsed time in seconds since animation started
+            final long t1 = System.currentTimeMillis();
+
+            // Calculate elapsed time in milliseconds since animation started
             final long currentTime = System.currentTimeMillis();
             final float elapsedMillis = (float)(currentTime - animationStartTime);
 
-            // Use elapsed time as z-position for 3D noise, with a scale factor
-            // that controls how fast clouds evolve
-            final float zPosition = elapsedMillis * animationSettings.evolutionRate;
+            // Calculate drift offsets based on elapsed time and drift rates
+            final float xOffset = elapsedMillis * animationSettings.driftX;
+            final float yOffset = elapsedMillis * animationSettings.driftY;
 
-            final SurfaceHolder holder = getSurfaceHolder();
+            // Use elapsed time for evolution (z-position in 3D noise)
+            final float zOffset = elapsedMillis * animationSettings.evolutionRate;
+
+            final long t2 = System.currentTimeMillis();
+
+            // Generate and draw clouds with evolution and drift
+            final Bitmap cloudBitmap = cloudRenderer.generateClouds(xOffset, yOffset, zOffset);
+
+            final long t3 = System.currentTimeMillis();
+
             Canvas canvas = null;
-
             try {
-                canvas = holder.lockCanvas();
+                canvas = getSurfaceHolder().lockCanvas();
+
+                final long t4 = System.currentTimeMillis();
+
                 if (canvas != null) {
                     // Draw solid sky color
                     canvas.drawRect(0, 0, surfaceWidth, surfaceHeight, skyPaint);
-
-                    // Generate and draw clouds
-                    final Bitmap cloudBitmap = cloudRenderer.generateClouds(zPosition);
-                    if (cloudBitmap != null) {
-                        canvas.drawBitmap(cloudBitmap, 0, 0, null);
-                    }
+                    canvas.drawBitmap(cloudBitmap, 0, 0, null);
                 }
+
+                final long t5 = System.currentTimeMillis();
+
+                Log.d("CloudPaper", "Draw timing: prep=" + (t2-t1) + "ms, generate=" + (t3-t2) +
+                      "ms, lockCanvas=" + (t4-t3) + "ms, drawOps=" + (t5-t4) + "ms, total=" + (t5-t1) + "ms");
+
             } finally {
                 if (canvas != null) {
-                    holder.unlockCanvasAndPost(canvas);
+                    long t6pre = System.currentTimeMillis();
+                    getSurfaceHolder().unlockCanvasAndPost(canvas);
+                    long t6post = System.currentTimeMillis();
+                    Log.d("CloudPaper", "unlockCanvasAndPost took " + (t6post-t6pre) + "ms");
                 }
             }
         }
