@@ -45,18 +45,35 @@ public class GLCloudPaperService extends GLWallpaperService {
             // Initialize animation settings
             animationSettings = new AnimationSettings();
 
+            Log.d(TAG, "GLCloudPaperEngine animationSettings were created");
+
             // Create GL renderer with animation settings
-            renderer = new GLCloudRenderer(GLCloudPaperService.this, animationSettings);
+            Log.d(TAG, "About to call GLCloudRenderer constructor");
+            try {
+                renderer = new GLCloudRenderer(GLCloudPaperService.this, animationSettings);
+                Log.d(TAG, "GLCloudRenderer constructor returned successfully");
+            } catch (Exception e) {
+                Log.e(TAG, "EXCEPTION in GLCloudRenderer constructor!", e);
+                throw e;
+            }
+
+            Log.d(TAG, "GLCloudPaperEngine renderer was created");
 
             // Request OpenGL ES 3.0 context (required for integer bitwise operations in shader)
             setEGLContextFactory(new GLES3ContextFactory());
 
+            Log.d(TAG, "GLCloudPaperEngine EGLContextFactory was set");
+
             // Set the renderer for this engine
             setRenderer(renderer);
+
+            Log.d(TAG, "GLCloudPaperEngine renderer was set");
 
             // Set render mode to continuous (animate continuously)
             // Alternative: RENDERMODE_WHEN_DIRTY for manual control
             setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+
+            Log.d(TAG, "GLCloudPaperEngine renderMode was set");
 
             Log.d(TAG, "GLCloudPaperEngine initialized with renderer");
         }

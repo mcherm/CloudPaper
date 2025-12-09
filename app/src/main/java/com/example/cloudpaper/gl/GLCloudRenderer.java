@@ -76,19 +76,21 @@ public class GLCloudRenderer implements android.opengl.GLSurfaceView.Renderer {
      * @param animationSettings The animation settings containing appearance parameters
      */
     public GLCloudRenderer(Context context, AnimationSettings animationSettings) {
+        Log.e(TAG, "*** GLCloudRenderer constructor ENTRY ***");
         this.context = context;
         this.animationSettings = animationSettings;
 
         // Extract values from AnimationSettings
+        Log.e(TAG, "*** About to extract values from AnimationSettings ***");
         this.frequency = animationSettings.noiseFrequency;
         this.threshold = animationSettings.cloudDensityThreshold;
         this.evolutionRate = animationSettings.evolutionRate;
         this.skyColor = parseHexColor(animationSettings.skyColor);
 
-        Log.d(TAG, "GLCloudRenderer initialized with settings: " +
+        Log.e(TAG, "*** GLCloudRenderer initialized with settings: " +
                    "frequency=" + frequency + ", threshold=" + threshold +
                    ", evolutionRate=" + evolutionRate +
-                   ", skyColor=" + animationSettings.skyColor);
+                   ", skyColor=" + animationSettings.skyColor + " ***");
     }
 
     /**
@@ -117,6 +119,7 @@ public class GLCloudRenderer implements android.opengl.GLSurfaceView.Renderer {
      */
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        Log.d(TAG, "Beginning the function onSurfaceCreated()");
         // Set clear color to sky blue
         GLES20.glClearColor(skyColor[0], skyColor[1], skyColor[2], 1.0f);
 

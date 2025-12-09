@@ -58,6 +58,8 @@ public class ShaderUtils {
      * @return The shader handle, or 0 if compilation fails
      */
     public static int compileShader(int shaderType, String shaderSource) {
+        Log.d(TAG, "Beginning the function compileShader(" + shaderType + ", <source>)");
+
         if (shaderSource == null || shaderSource.isEmpty()) {
             Log.e(TAG, "Shader source is null or empty");
             return 0;
@@ -83,8 +85,21 @@ public class ShaderUtils {
         if (compileStatus[0] == 0) {
             // Compilation failed - get error log
             String errorLog = GLES20.glGetShaderInfoLog(shaderHandle);
-            Log.e(TAG, "Shader compilation failed:\n" + errorLog);
-            Log.e(TAG, "Shader source:\n" + shaderSource);
+            String shaderTypeName = (shaderType == GLES20.GL_VERTEX_SHADER) ? "VERTEX" : "FRAGMENT";
+
+            // Log error as a single message to avoid filtering issues
+            StringBuilder errorMessage = new StringBuilder();
+            errorMessage.append("\n=== SHADER COMPILATION FAILED ===\n");
+            errorMessage.append("Shader Type: ").append(shaderTypeName).append("\n");
+            errorMessage.append("OpenGL Error: ");
+            if (errorLog != null && !errorLog.isEmpty()) {
+                errorMessage.append(errorLog);
+            } else {
+                errorMessage.append("NO ERROR MESSAGE FROM OPENGL");
+            }
+            errorMessage.append("\n=================================\n");
+
+            Log.e(TAG, errorMessage.toString());
 
             // Delete the shader
             GLES20.glDeleteShader(shaderHandle);
@@ -106,6 +121,7 @@ public class ShaderUtils {
      * @return The shader program handle, or 0 if creation fails
      */
     public static int createProgram(Context context, int vertexResourceId, int fragmentResourceId) {
+        Log.d(TAG, "Beginning the function createProgram()");
         // Load shader sources
         String vertexSource = loadShaderSource(context, vertexResourceId);
         String fragmentSource = loadShaderSource(context, fragmentResourceId);

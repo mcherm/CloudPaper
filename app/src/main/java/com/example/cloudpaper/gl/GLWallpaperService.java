@@ -121,6 +121,7 @@ public class GLWallpaperService extends WallpaperService {
 		}
 
 		public void setRenderer(GLSurfaceView.Renderer renderer) {
+			Log.d(TAG, "setRenderer() called");
 			checkRenderThreadState();
 			if (mEGLConfigChooser == null) {
 				mEGLConfigChooser = new SimpleEGLConfigChooser(true);
@@ -131,8 +132,11 @@ public class GLWallpaperService extends WallpaperService {
 			if (mEGLWindowSurfaceFactory == null) {
 				mEGLWindowSurfaceFactory = new DefaultWindowSurfaceFactory();
 			}
+			Log.d(TAG, "Creating GLThread");
 			mGLThread = new GLThread(renderer, mEGLConfigChooser, mEGLContextFactory, mEGLWindowSurfaceFactory, mGLWrapper);
+			Log.d(TAG, "Starting GLThread");
 			mGLThread.start();
+			Log.d(TAG, "GLThread.start() returned");
 		}
 
 		public void setEGLContextFactory(GLSurfaceView.EGLContextFactory factory) {
@@ -511,16 +515,23 @@ class GLThread extends Thread {
 
 	@Override
 	public void run() {
+		Log.d("GLWallpaperService", "GLThread.run() called - thread starting");
 		setName("GLThread " + getId());
 		if (LOG_THREADS) {
 			Log.i("GLThread", "starting tid=" + getId());
 		}
 
 		try {
+			Log.d("GLWallpaperService", "About to call guardedRun()");
 			guardedRun();
+			Log.d("GLWallpaperService", "guardedRun() returned normally");
 		} catch (InterruptedException e) {
+			Log.e("GLWallpaperService", "guardedRun() threw InterruptedException", e);
 			// fall thru and exit normally
+		} catch (Exception e) {
+			Log.e("GLWallpaperService", "guardedRun() threw unexpected exception", e);
 		} finally {
+			Log.d("GLWallpaperService", "GLThread.run() finishing");
 			sGLThreadManager.threadExiting(this);
 		}
 	}
@@ -537,6 +548,7 @@ class GLThread extends Thread {
 	}
 
 	private void guardedRun() throws InterruptedException {
+        Log.d("GLWallpaperService", "Beginning the function guardedRun()");
 		mEglHelper = new EglHelper(mEGLConfigChooser, mEGLContextFactory, mEGLWindowSurfaceFactory, mGLWrapper);
 		try {
 			GL10 gl = null;
