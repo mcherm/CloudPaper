@@ -1,6 +1,10 @@
 #!/bin/bash
 # Build the CloudPaper APK
 
+# Set JAVA_HOME to Java 21 (required for Gradle 8.13)
+source "$(dirname "$0")/set-java-env.sh"
+
+echo ""
 echo "Building CloudPaper APK..."
 ./gradlew assembleDebug
 

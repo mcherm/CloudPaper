@@ -11,17 +11,32 @@
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
         tools:targetApi="31">
 
-        <!-- CloudPaper Live Wallpaper Service -->
+        <!-- CloudPaper Live Wallpaper Service (CPU-based) -->
         <service
             android:name=".CloudPaperService"
             android:permission="android.permission.BIND_WALLPAPER"
-            android:exported="true">
+            android:exported="true"
+            android:label="CloudPaper (CPU)">
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />
             </intent-filter>
             <meta-data
                 android:name="android.service.wallpaper"
                 android:resource="@xml/wallpaper" />
+        </service>
+
+        <!-- CloudPaper Live Wallpaper Service (GPU-accelerated) -->
+        <service
+            android:name=".GLCloudPaperService"
+            android:permission="android.permission.BIND_WALLPAPER"
+            android:exported="true"
+            android:label="CloudPaper (GPU)">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper_gl" />
         </service>
 
     </application>

@@ -34,8 +34,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.preference:preference:1.2.1'
 
-    // OpenGL Live Wallpaper support
-    implementation 'com.github.markfguerra:GLWallpaperService:1.0'
+    // OpenGL Live Wallpaper support - using included source file
+    // GLWallpaperService.java is included directly in the project
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

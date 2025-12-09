@@ -2,6 +2,16 @@
 
 This folder contains helper scripts to simplify common development tasks.
 
+## Java Requirements
+
+This project requires **Java 21** for building (due to Gradle 8.13 compatibility). The build scripts automatically set the correct Java version using `set-java-env.sh`.
+
+If you need to build manually with Gradle, set JAVA_HOME first:
+```bash
+source ./scripts/set-java-env.sh
+./gradlew assembleDebug
+```
+
 ## Available Scripts
 
 ### `start-emulator.sh`
@@ -82,6 +92,17 @@ Clear the Android log buffer.
 ```
 
 Use this before testing to get a clean log view without old messages.
+
+---
+
+### `set-java-env.sh`
+Sets JAVA_HOME to Java 21 (required for building CloudPaper).
+
+```bash
+source ./scripts/set-java-env.sh
+```
+
+**Note:** This script is automatically sourced by `build.sh` and `build-and-install.sh`, so you typically don't need to run it manually. Only use it if you're running Gradle commands directly.
 
 ---
 
