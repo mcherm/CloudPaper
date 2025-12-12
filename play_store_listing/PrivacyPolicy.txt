@@ -14,7 +14,10 @@ ADVERTISING AND TRACKING
 CloudPaper does not use any analytics, advertising, or tracking services.
 
 DATA SHARING
-CloudPaper does not share any data with third parties (also, it does collect any data which COULD be shared).
+CloudPaper does not share any data with third parties (also, it does not collect any data that COULD be shared).
+
+CONFIRM FOR YOURSELF
+The source code for CloudPaper is available at https://github.com/mcherm/CloudPaper.
 
 CONTACT
 If you have questions about this privacy policy, please contact the developer: Michael Chermside at mcherm@mcherm.com.

@@ -12,3 +12,6 @@ HOW TO USE:
 3. Select Wallpapers → Live Wallpapers → CloudPaper
 4. Customize settings if desired (different Android versions have different ways to access wallpaper settings)
 5. Enjoy your new background
+
+SOURCE CODE:
+Source code is available at https://github.com/mcherm/CloudPaper
