@@ -3,4 +3,4 @@
     android:description="@string/wallpaper_description"
     android:author="@string/wallpaper_author"
     android:thumbnail="@mipmap/ic_launcher"
-    android:settingsActivity="com.example.cloudpaper.SettingsActivity" />
+    android:settingsActivity="com.mcherm.cloudpaper.SettingsActivity" />

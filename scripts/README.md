@@ -4,6 +4,19 @@ This folder contains helper scripts to simplify common development tasks.
 
 ## Available Scripts
 
+### `set-java-home.sh`
+Sets JAVA_HOME to Java 17 for building CloudPaper. This script is automatically sourced by build scripts.
+
+```bash
+source ./scripts/set-java-home.sh
+```
+
+**Note:** This script is designed to be sourced (not executed directly) by other build scripts. It automatically detects Java 17 installed via Homebrew.
+
+**Prerequisites:** Java 17 must be installed via Homebrew (`brew install openjdk@17`)
+
+---
+
 ### `start-emulator.sh`
 Starts the Android emulator (Medium_Phone_API_35).
 

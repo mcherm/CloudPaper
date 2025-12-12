@@ -1,6 +1,9 @@
 #!/bin/bash
 # Build the CloudPaper APK
 
+# Set JAVA_HOME to Java 17
+source "$(dirname "$0")/set-java-home.sh"
+
 echo "Building CloudPaper APK..."
 ./gradlew assembleDebug
 

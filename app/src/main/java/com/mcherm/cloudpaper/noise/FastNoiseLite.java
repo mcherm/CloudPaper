@@ -51,7 +51,7 @@
 // perform a file-wide replace on the following strings (including /*FNLfloat*/)
 // /*FNLfloat*/ float
 // /*FNLfloat*/ double
-package com.example.cloudpaper.noise;
+package com.mcherm.cloudpaper.noise;
 
 
 public class FastNoiseLite

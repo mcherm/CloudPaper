@@ -1,11 +1,11 @@
-package com.example.cloudpaper.renderer;
+package com.mcherm.cloudpaper.renderer;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 
-import com.example.cloudpaper.AnimationSettings;
-import com.example.cloudpaper.noise.FastNoiseLite;
+import com.mcherm.cloudpaper.AnimationSettings;
+import com.mcherm.cloudpaper.noise.FastNoiseLite;
 
 /**
  * CloudRenderer - Generates procedural cloud textures using 3D Simplex noise
@@ -69,7 +69,6 @@ public class CloudRenderer {
                 // x,y is screen coordinates (with drift), z is time
                 float noiseValue = noise.GetNoise(x - xOffset, y - yOffset, zOffset);
 
-                // FIXME: This normalization might not be necessary if I set my threshold differently
                 // Normalize noise from [-1, 1] to [0, 1]
                 noiseValue = (noiseValue + 1.0f) / 2.0f;
 

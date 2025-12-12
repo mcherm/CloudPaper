@@ -1,6 +1,9 @@
 #!/bin/bash
 # Build and install CloudPaper in one step
 
+# Set JAVA_HOME to Java 17
+source "$(dirname "$0")/set-java-home.sh"
+
 echo "================================"
 echo "CloudPaper: Build and Install"
 echo "================================"

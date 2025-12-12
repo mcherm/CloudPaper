@@ -98,11 +98,10 @@ Create an Android live wallpaper application that displays an animated sky backg
 - [X] Deploy and test settings on device
 
 ### Phase 7: Code Cleanup
-- [ ] Check for warnings and resolve
-- [ ] Change package from com.example.cloudpaper to com.mcherm.cloudpaper
-- [ ] Upgrade target Java version from 8 to something more modern
-- [ ] Address all "FIXME" comments
-- [ ] Stop using setColor() and instead read it from the Settings object
+- [X] Check for warnings and resolve
+- [X] Change package from com.example.cloudpaper to com.mcherm.cloudpaper
+- [X] Upgrade target Java version from 8 to something more modern
+- [X] Address all "FIXME" comments
 
 ### Phase 8: Testing & Deployment
 - [X] Test on multiple devices/screen sizes
@@ -116,7 +115,7 @@ Create an Android live wallpaper application that displays an animated sky backg
 ```
 app/
 ├── src/main/
-│   ├── java/com/example/cloudpaper/
+│   ├── java/com/mcherm/cloudpaper/
 │   │   ├── CloudPaperService.java     # Main WallpaperService
 │   │   ├── CloudEngine.java           # Engine inner class (handles lifecycle)
 │   │   ├── noise/

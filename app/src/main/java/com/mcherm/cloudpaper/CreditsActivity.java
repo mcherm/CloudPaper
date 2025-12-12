@@ -1,4 +1,4 @@
-package com.example.cloudpaper;
+package com.mcherm.cloudpaper;
 
 import android.app.Activity;
 import android.os.Bundle;

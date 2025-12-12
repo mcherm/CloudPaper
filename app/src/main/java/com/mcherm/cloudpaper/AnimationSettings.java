@@ -1,4 +1,4 @@
-package com.example.cloudpaper;
+package com.mcherm.cloudpaper;
 
 /**
  * This is a data class which contains all the configurable parameters for the animation.

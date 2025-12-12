@@ -1,4 +1,4 @@
-package com.example.cloudpaper;
+package com.mcherm.cloudpaper;
 
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -11,7 +11,7 @@ import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import com.example.cloudpaper.renderer.CloudRenderer;
+import com.mcherm.cloudpaper.renderer.CloudRenderer;
 
 /**
  * CloudPaper Live Wallpaper Service
@@ -43,7 +43,7 @@ public class CloudPaperService extends WallpaperService {
         private Handler handler;
         private Runnable drawRunnable;
         private long animationStartTime;
-        private long prevFrameMillis; // FIXME: Remove this
+        private long prevFrameMillis;
         private long frameSpacingMillis;
 
         @Override
