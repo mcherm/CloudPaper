@@ -73,7 +73,7 @@ public class CloudRenderer {
                 // Normalize noise from [-1, 1] to [0, 1]
                 noiseValue = (noiseValue + 1.0f) / 2.0f;
 
-                final float threshold = animationSettings.cloudDensityThreshold;
+                final float threshold = 1.0f - animationSettings.cloudDensityThreshold;
 
                 final int pixelValue;
                 // Apply threshold to create sparse clouds

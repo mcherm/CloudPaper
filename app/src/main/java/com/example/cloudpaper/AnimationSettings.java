@@ -31,7 +31,7 @@ public class AnimationSettings {
     /** Affects the horizontal and vertical spacing of the clouds. */
     public final float noiseFrequency;
 
-    /** Controls cloud density. Higher values = fewer, sparser clouds. Range: 0.0 to 1.0 */
+    /** Controls cloud density. Higher values = more, denser clouds. Range: 0.0 to 1.0 */
     public final float cloudDensityThreshold;
 
     /** Horizontal drift rate (positive = drift east/right). Default is slow drift eastward. */

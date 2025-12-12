@@ -21,25 +21,28 @@ public class SettingsActivity extends Activity {
     private SettingsManager settingsManager;
 
     // UI elements
-    private SeekBar pixelSizeSeekBar;
-    private TextView pixelSizeValue;
-    private SeekBar fpsSeekBar;
-    private TextView fpsValue;
+    private EditText pixelSizeEdit;
+    private EditText fpsEdit;
     private EditText skyColorEdit;
     private View skyColorPreview;
-    private SeekBar evolutionRateSeekBar;
-    private TextView evolutionRateValue;
-    private SeekBar noiseFrequencySeekBar;
-    private TextView noiseFrequencyValue;
+    private EditText evolutionRateEdit;
+    private EditText noiseFrequencyEdit;
     private SeekBar cloudDensitySeekBar;
     private TextView cloudDensityValue;
-    private SeekBar driftXSeekBar;
-    private TextView driftXValue;
-    private SeekBar driftYSeekBar;
-    private TextView driftYValue;
+    private EditText driftXEdit;
+    private EditText driftYEdit;
     private Button saveButton;
-    private Button resetButton;
     private Button creditsButton;
+
+    // Reset buttons
+    private Button pixelSizeResetButton;
+    private Button fpsResetButton;
+    private Button skyColorResetButton;
+    private Button evolutionRateResetButton;
+    private Button noiseFrequencyResetButton;
+    private Button cloudDensityResetButton;
+    private Button driftXResetButton;
+    private Button driftYResetButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,88 +62,61 @@ public class SettingsActivity extends Activity {
     }
 
     private void initializeViews() {
-        pixelSizeSeekBar = findViewById(R.id.pixelSizeSeekBar);
-        pixelSizeValue = findViewById(R.id.pixelSizeValue);
-        fpsSeekBar = findViewById(R.id.fpsSeekBar);
-        fpsValue = findViewById(R.id.fpsValue);
+        pixelSizeEdit = findViewById(R.id.pixelSizeEdit);
+        fpsEdit = findViewById(R.id.fpsEdit);
         skyColorEdit = findViewById(R.id.skyColorEdit);
         skyColorPreview = findViewById(R.id.skyColorPreview);
-        evolutionRateSeekBar = findViewById(R.id.evolutionRateSeekBar);
-        evolutionRateValue = findViewById(R.id.evolutionRateValue);
-        noiseFrequencySeekBar = findViewById(R.id.noiseFrequencySeekBar);
-        noiseFrequencyValue = findViewById(R.id.noiseFrequencyValue);
+        evolutionRateEdit = findViewById(R.id.evolutionRateEdit);
+        noiseFrequencyEdit = findViewById(R.id.noiseFrequencyEdit);
         cloudDensitySeekBar = findViewById(R.id.cloudDensitySeekBar);
         cloudDensityValue = findViewById(R.id.cloudDensityValue);
-        driftXSeekBar = findViewById(R.id.driftXSeekBar);
-        driftXValue = findViewById(R.id.driftXValue);
-        driftYSeekBar = findViewById(R.id.driftYSeekBar);
-        driftYValue = findViewById(R.id.driftYValue);
+        driftXEdit = findViewById(R.id.driftXEdit);
+        driftYEdit = findViewById(R.id.driftYEdit);
         saveButton = findViewById(R.id.saveButton);
-        resetButton = findViewById(R.id.resetButton);
         creditsButton = findViewById(R.id.creditsButton);
+
+        // Initialize reset buttons
+        pixelSizeResetButton = findViewById(R.id.pixelSizeResetButton);
+        fpsResetButton = findViewById(R.id.fpsResetButton);
+        skyColorResetButton = findViewById(R.id.skyColorResetButton);
+        evolutionRateResetButton = findViewById(R.id.evolutionRateResetButton);
+        noiseFrequencyResetButton = findViewById(R.id.noiseFrequencyResetButton);
+        cloudDensityResetButton = findViewById(R.id.cloudDensityResetButton);
+        driftXResetButton = findViewById(R.id.driftXResetButton);
+        driftYResetButton = findViewById(R.id.driftYResetButton);
     }
 
     private void loadSettings() {
         AnimationSettings settings = settingsManager.loadSettings();
 
-        // Pixel Size: 1-10
-        pixelSizeSeekBar.setProgress(settings.pixelSize - 1);
-        pixelSizeValue.setText(String.valueOf(settings.pixelSize));
+        // Pixel Size
+        pixelSizeEdit.setText(String.valueOf(settings.pixelSize));
 
-        // FPS: 1-30
-        fpsSeekBar.setProgress(settings.framesPerSecond - 1);
-        fpsValue.setText(String.valueOf(settings.framesPerSecond));
+        // FPS
+        fpsEdit.setText(String.valueOf(settings.framesPerSecond));
 
         // Sky Color
         skyColorEdit.setText(settings.skyColor);
         updateColorPreview(settings.skyColor);
 
-        // Evolution Rate: 0.001-0.020 (mapped to 0-190)
-        int evolutionProgress = Math.round((settings.evolutionRate - 0.001f) / 0.0001f);
-        evolutionRateSeekBar.setProgress(evolutionProgress);
-        evolutionRateValue.setText(String.format("%.4f", settings.evolutionRate));
+        // Evolution Rate
+        evolutionRateEdit.setText(String.format("%.4f", settings.evolutionRate));
 
-        // Noise Frequency: 0.001-0.020 (mapped to 0-190)
-        int noiseProgress = Math.round((settings.noiseFrequency - 0.001f) / 0.0001f);
-        noiseFrequencySeekBar.setProgress(noiseProgress);
-        noiseFrequencyValue.setText(String.format("%.4f", settings.noiseFrequency));
+        // Noise Frequency
+        noiseFrequencyEdit.setText(String.format("%.4f", settings.noiseFrequency));
 
         // Cloud Density: 0.0-1.0 (mapped to 0-100)
         cloudDensitySeekBar.setProgress(Math.round(settings.cloudDensityThreshold * 100));
         cloudDensityValue.setText(String.format("%.2f", settings.cloudDensityThreshold));
 
-        // Drift X: -0.010 to 0.010 (mapped to 0-200, center is 100)
-        int driftXProgress = Math.round((settings.driftX + 0.010f) / 0.0001f);
-        driftXSeekBar.setProgress(driftXProgress);
-        driftXValue.setText(String.format("%.4f", settings.driftX));
+        // Drift X
+        driftXEdit.setText(String.format("%.4f", settings.driftX));
 
-        // Drift Y: -0.010 to 0.010 (mapped to 0-200, center is 100)
-        int driftYProgress = Math.round((settings.driftY + 0.010f) / 0.0001f);
-        driftYSeekBar.setProgress(driftYProgress);
-        driftYValue.setText(String.format("%.4f", settings.driftY));
+        // Drift Y
+        driftYEdit.setText(String.format("%.4f", settings.driftY));
     }
 
     private void setupListeners() {
-        // Pixel Size
-        pixelSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                pixelSizeValue.setText(String.valueOf(progress + 1));
-            }
-            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
-        // FPS
-        fpsSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                fpsValue.setText(String.valueOf(progress + 1));
-            }
-            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
         // Sky Color
         skyColorEdit.addTextChangedListener(new TextWatcher() {
             @Override
@@ -151,28 +127,6 @@ public class SettingsActivity extends Activity {
             }
             @Override
             public void afterTextChanged(Editable s) {}
-        });
-
-        // Evolution Rate
-        evolutionRateSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                float value = 0.001f + (progress * 0.0001f);
-                evolutionRateValue.setText(String.format("%.4f", value));
-            }
-            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
-        // Noise Frequency
-        noiseFrequencySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                float value = 0.001f + (progress * 0.0001f);
-                noiseFrequencyValue.setText(String.format("%.4f", value));
-            }
-            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
         // Cloud Density
@@ -186,33 +140,44 @@ public class SettingsActivity extends Activity {
             @Override public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        // Drift X
-        driftXSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                float value = -0.010f + (progress * 0.0001f);
-                driftXValue.setText(String.format("%.4f", value));
-            }
-            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+        // Individual reset buttons
+        pixelSizeResetButton.setOnClickListener(v -> {
+            pixelSizeEdit.setText(String.valueOf(AnimationSettings.DEFAULT_PIXEL_SIZE));
         });
 
-        // Drift Y
-        driftYSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                float value = -0.010f + (progress * 0.0001f);
-                driftYValue.setText(String.format("%.4f", value));
-            }
-            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+        fpsResetButton.setOnClickListener(v -> {
+            fpsEdit.setText(String.valueOf(AnimationSettings.DEFAULT_FRAMES_PER_SECOND));
+        });
+
+        skyColorResetButton.setOnClickListener(v -> {
+            skyColorEdit.setText(AnimationSettings.DEFAULT_SKY_COLOR);
+            updateColorPreview(AnimationSettings.DEFAULT_SKY_COLOR);
+        });
+
+        evolutionRateResetButton.setOnClickListener(v -> {
+            evolutionRateEdit.setText(String.format("%.4f", AnimationSettings.DEFAULT_EVOLUTION_RATE));
+        });
+
+        noiseFrequencyResetButton.setOnClickListener(v -> {
+            noiseFrequencyEdit.setText(String.format("%.4f", AnimationSettings.DEFAULT_NOISE_FREQUENCY));
+        });
+
+        cloudDensityResetButton.setOnClickListener(v -> {
+            int progress = Math.round(AnimationSettings.DEFAULT_CLOUD_DENSITY_THRESHOLD * 100);
+            cloudDensitySeekBar.setProgress(progress);
+            cloudDensityValue.setText(String.format("%.2f", AnimationSettings.DEFAULT_CLOUD_DENSITY_THRESHOLD));
+        });
+
+        driftXResetButton.setOnClickListener(v -> {
+            driftXEdit.setText(String.format("%.4f", AnimationSettings.DEFAULT_DRIFT_X));
+        });
+
+        driftYResetButton.setOnClickListener(v -> {
+            driftYEdit.setText(String.format("%.4f", AnimationSettings.DEFAULT_DRIFT_Y));
         });
 
         // Save Button
         saveButton.setOnClickListener(v -> saveSettings());
-
-        // Reset Button
-        resetButton.setOnClickListener(v -> resetToDefaults());
 
         // Credits Button
         creditsButton.setOnClickListener(v -> openCredits());
@@ -230,14 +195,24 @@ public class SettingsActivity extends Activity {
     private void saveSettings() {
         try {
             // Read values from UI
-            int pixelSize = pixelSizeSeekBar.getProgress() + 1;
-            int fps = fpsSeekBar.getProgress() + 1;
-            String skyColor = skyColorEdit.getText().toString();
-            float evolutionRate = 0.001f + (evolutionRateSeekBar.getProgress() * 0.0001f);
-            float noiseFrequency = 0.001f + (noiseFrequencySeekBar.getProgress() * 0.0001f);
+            int pixelSize = Integer.parseInt(pixelSizeEdit.getText().toString().trim());
+            int fps = Integer.parseInt(fpsEdit.getText().toString().trim());
+            String skyColor = skyColorEdit.getText().toString().trim();
+            float evolutionRate = Float.parseFloat(evolutionRateEdit.getText().toString().trim());
+            float noiseFrequency = Float.parseFloat(noiseFrequencyEdit.getText().toString().trim());
             float cloudDensity = cloudDensitySeekBar.getProgress() / 100.0f;
-            float driftX = -0.010f + (driftXSeekBar.getProgress() * 0.0001f);
-            float driftY = -0.010f + (driftYSeekBar.getProgress() * 0.0001f);
+            float driftX = Float.parseFloat(driftXEdit.getText().toString().trim());
+            float driftY = Float.parseFloat(driftYEdit.getText().toString().trim());
+
+            // Validate ranges
+            if (pixelSize < 1 || pixelSize > 10) {
+                Toast.makeText(this, "Pixel Size must be between 1 and 10", Toast.LENGTH_LONG).show();
+                return;
+            }
+            if (fps < 1 || fps > 30) {
+                Toast.makeText(this, "FPS must be between 1 and 30", Toast.LENGTH_LONG).show();
+                return;
+            }
 
             // Validate color
             Color.parseColor(skyColor);
@@ -251,15 +226,11 @@ public class SettingsActivity extends Activity {
 
             Toast.makeText(this, "Settings saved!", Toast.LENGTH_SHORT).show();
             finish();
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Invalid number format. Please check all fields.", Toast.LENGTH_LONG).show();
         } catch (IllegalArgumentException e) {
             Toast.makeText(this, "Invalid color format. Use hex format like #55B4E1", Toast.LENGTH_LONG).show();
         }
-    }
-
-    private void resetToDefaults() {
-        settingsManager.resetToDefaults();
-        loadSettings();
-        Toast.makeText(this, "Settings reset to defaults", Toast.LENGTH_SHORT).show();
     }
 
     private void openCredits() {
