@@ -1,5 +1,6 @@
 package com.example.cloudpaper;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -27,8 +28,9 @@ public class CloudPaperService extends WallpaperService {
     /**
      * Engine inner class that handles the wallpaper rendering and lifecycle
      */
-    private class CloudPaperEngine extends Engine {
+    private class CloudPaperEngine extends Engine implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+        private SettingsManager settingsManager;
         private Paint skyPaint;
         private CloudRenderer cloudRenderer;
         private AnimationSettings animationSettings;
@@ -42,17 +44,22 @@ public class CloudPaperService extends WallpaperService {
         private Runnable drawRunnable;
         private long animationStartTime;
         private long prevFrameMillis; // FIXME: Remove this
+        private long frameSpacingMillis;
 
         @Override
         public void onCreate(SurfaceHolder surfaceHolder) {
             super.onCreate(surfaceHolder);
 
-            // Initialize the animationSettings
-            animationSettings = new AnimationSettings();
+            // Initialize settings manager and load settings
+            settingsManager = new SettingsManager(CloudPaperService.this);
+            animationSettings = settingsManager.loadSettings();
+
+            // Register preference change listener
+            settingsManager.registerListener(this);
 
             // Initialize sky paint with solid color
             skyPaint = new Paint();
-            skyPaint.setColor(Color.parseColor( animationSettings.skyColor));
+            skyPaint.setColor(Color.parseColor(animationSettings.skyColor));
             skyPaint.setStyle(Paint.Style.FILL);
 
             // Initialize cloud renderer
@@ -60,25 +67,10 @@ public class CloudPaperService extends WallpaperService {
 
             // Initialize animation
             handler = new Handler(Looper.getMainLooper());
-            final long frameSpacingMillis = 1000 / animationSettings.framesPerSecond;
+            frameSpacingMillis = 1000 / animationSettings.framesPerSecond;
             animationStartTime = System.currentTimeMillis();
 
-            drawRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    final long newTimeMillis = System.currentTimeMillis();
-                    final long elapsedMillis = newTimeMillis - prevFrameMillis;
-                    prevFrameMillis = newTimeMillis;
-                    Log.d("CloudPaper", "Beginning new run just " + elapsedMillis + " millis later.");
-                    draw();
-                    final long afterDrawMillis = System.currentTimeMillis();
-                    final long frameDelay = frameSpacingMillis - (afterDrawMillis - newTimeMillis);
-                    if (visible) {
-                        Log.d("CloudPaper", "Will schedule to run again in " + frameDelay + "ms");
-                        handler.postDelayed(this, frameDelay);
-                    }
-                }
-            };
+            createDrawRunnable();
 
             visible = false;
         }
@@ -128,6 +120,65 @@ public class CloudPaperService extends WallpaperService {
             super.onDestroy();
             visible = false;
             handler.removeCallbacks(drawRunnable);
+
+            // Unregister preference change listener
+            settingsManager.unregisterListener(this);
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            Log.d("CloudPaper", "Settings changed, reloading...");
+
+            // Stop current animation
+            handler.removeCallbacks(drawRunnable);
+
+            // Reload settings
+            animationSettings = settingsManager.loadSettings();
+
+            // Update sky color
+            skyPaint.setColor(Color.parseColor(animationSettings.skyColor));
+
+            // Recreate cloud renderer with new settings
+            cloudRenderer = new CloudRenderer(animationSettings);
+            if (surfaceWidth > 0 && surfaceHeight > 0) {
+                cloudRenderer.setSurfaceSize(surfaceWidth, surfaceHeight);
+            }
+
+            // Update frame spacing and reset animation timer
+            frameSpacingMillis = 1000 / animationSettings.framesPerSecond;
+            animationStartTime = System.currentTimeMillis();
+
+            // Recreate draw runnable with new frame spacing
+            createDrawRunnable();
+
+            // Restart animation if visible
+            if (visible) {
+                handler.post(drawRunnable);
+            }
+
+            Log.d("CloudPaper", "Settings reload complete");
+        }
+
+        /**
+         * Creates the draw runnable with current frame spacing
+         */
+        private void createDrawRunnable() {
+            drawRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    final long newTimeMillis = System.currentTimeMillis();
+                    final long elapsedMillis = newTimeMillis - prevFrameMillis;
+                    prevFrameMillis = newTimeMillis;
+                    Log.d("CloudPaper", "Beginning new run just " + elapsedMillis + " millis later.");
+                    draw();
+                    final long afterDrawMillis = System.currentTimeMillis();
+                    final long frameDelay = frameSpacingMillis - (afterDrawMillis - newTimeMillis);
+                    if (visible) {
+                        Log.d("CloudPaper", "Will schedule to run again in " + frameDelay + "ms");
+                        handler.postDelayed(this, frameDelay);
+                    }
+                }
+            };
         }
 
         /**

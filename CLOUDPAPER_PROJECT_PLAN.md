@@ -87,16 +87,24 @@ Create an Android live wallpaper application that displays an animated sky backg
 - [X] Deploy to device and test animation on both emulator and actual device
 
 ### Phase 6: Polish & Settings (Optional)
-- [ ] Create settings activity
-- [ ] Implement SharedPreferences integration
-- [ ] Add user preferences for each of the adjustable parameters, including
+- [X] Create settings activity
+- [X] Implement SharedPreferences integration
+- [X] Add user preferences for each of the adjustable parameters, including
   - Animation FPS (frame rate adjustment)
   - Evolution time (how fast the Z parameter changes)
   - Drift speed (how fast clouds move)
   - Cloud density/intensity (noise threshold adjustments)
-- [ ] Deploy and test settings on device
+- [X] Create "credits" activity to show copyright notices and credits
+- [X] Deploy and test settings on device
 
-### Phase 7: Testing & Deployment
+### Phase 7: Code Cleanup
+- [ ] Check for warnings and resolve
+- [ ] Change package from com.example.cloudpaper to com.mcherm.cloudpaper
+- [ ] Upgrade target Java version from 8 to something more modern
+- [ ] Address all "FIXME" comments
+- [ ] Stop using setColor() and instead read it from the Settings object
+
+### Phase 8: Testing & Deployment
 - [X] Test on multiple devices/screen sizes
 - [X] Test battery impact and performance
 - [X] Create app icon and preview image

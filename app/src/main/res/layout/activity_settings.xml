@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CloudPaper Settings"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:paddingBottom="16dp"/>
+
+        <!-- Pixel Size -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pixel Size (1-10)"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+        <TextView
+            android:id="@+id/pixelSizeValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="4"/>
+        <SeekBar
+            android:id="@+id/pixelSizeSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="9"
+            android:progress="3"/>
+
+        <!-- Frames Per Second -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Frames Per Second (1-30)"
+            android:textStyle="bold"
+            android:paddingTop="16dp"/>
+        <TextView
+            android:id="@+id/fpsValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="4"/>
+        <SeekBar
+            android:id="@+id/fpsSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="29"
+            android:progress="3"/>
+
+        <!-- Sky Color -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sky Color (hex format)"
+            android:textStyle="bold"
+            android:paddingTop="16dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/skyColorEdit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="#55B4E1"
+                android:inputType="text"/>
+            <View
+                android:id="@+id/skyColorPreview"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:background="#55B4E1"/>
+        </LinearLayout>
+
+        <!-- Evolution Rate -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Evolution Rate (0.001-0.020)"
+            android:textStyle="bold"
+            android:paddingTop="16dp"/>
+        <TextView
+            android:id="@+id/evolutionRateValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0.005"/>
+        <SeekBar
+            android:id="@+id/evolutionRateSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="190"
+            android:progress="40"/>
+
+        <!-- Noise Frequency -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Noise Frequency (0.001-0.020)"
+            android:textStyle="bold"
+            android:paddingTop="16dp"/>
+        <TextView
+            android:id="@+id/noiseFrequencyValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0.005"/>
+        <SeekBar
+            android:id="@+id/noiseFrequencySeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="190"
+            android:progress="40"/>
+
+        <!-- Cloud Density Threshold -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cloud Density Threshold (0.0-1.0)"
+            android:textStyle="bold"
+            android:paddingTop="16dp"/>
+        <TextView
+            android:id="@+id/cloudDensityValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0.50"/>
+        <SeekBar
+            android:id="@+id/cloudDensitySeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="50"/>
+
+        <!-- Drift X -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Horizontal Drift (-0.010 to 0.010)"
+            android:textStyle="bold"
+            android:paddingTop="16dp"/>
+        <TextView
+            android:id="@+id/driftXValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0.003"/>
+        <SeekBar
+            android:id="@+id/driftXSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="200"
+            android:progress="130"/>
+
+        <!-- Drift Y -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vertical Drift (-0.010 to 0.010)"
+            android:textStyle="bold"
+            android:paddingTop="16dp"/>
+        <TextView
+            android:id="@+id/driftYValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0.0005"/>
+        <SeekBar
+            android:id="@+id/driftYSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="200"
+            android:progress="105"/>
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="24dp"
+            android:paddingBottom="16dp">
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Save"/>
+            <Button
+                android:id="@+id/resetButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="Reset to Defaults"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/creditsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Credits"
+            android:layout_marginBottom="16dp"/>
+
+    </LinearLayout>
+</ScrollView>

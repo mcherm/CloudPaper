@@ -24,6 +24,20 @@
                 android:resource="@xml/wallpaper" />
         </service>
 
+        <!-- Settings Activity -->
+        <activity
+            android:name=".SettingsActivity"
+            android:label="CloudPaper Settings"
+            android:exported="true">
+        </activity>
+
+        <!-- Credits Activity -->
+        <activity
+            android:name=".CreditsActivity"
+            android:label="Credits"
+            android:exported="false">
+        </activity>
+
     </application>
 
 </manifest>
