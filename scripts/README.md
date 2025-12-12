@@ -74,6 +74,31 @@ Builds the APK and installs it in one step (most commonly used).
 
 ---
 
+### `build-release.sh`
+Builds the signed release bundle (AAB) for Google Play Store submission.
+
+```bash
+./scripts/build-release.sh
+```
+
+This creates an Android App Bundle (AAB) file signed with your release keystore. The script will prompt you to enter your keystore password securely (password is not displayed as you type).
+
+**Output:** `app/build/outputs/bundle/release/app-release.aab`
+
+**Prerequisites:**
+- Release keystore must exist at `~/.android/cloudpaper-release.keystore`
+- You must know the keystore password
+
+**Alternative:** Set environment variable to skip password prompt:
+```bash
+export KEYSTORE_PASSWORD='your_keystore_password'
+./scripts/build-release.sh
+```
+
+**Note:** The same password is used for both the keystore and the key entry (as configured when the keystore was created).
+
+---
+
 ### `view-logs.sh`
 View real-time CloudPaper debug logs from the device/emulator.
 
