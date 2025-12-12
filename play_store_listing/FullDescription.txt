@@ -1,0 +1,14 @@
+This is a simple live wallpaper that provides a backdrop of sky with animated clouds very slowly drifting by.
+
+FEATURES:
+• Adjustable settings for sky color and cloud patterns
+• Battery usage is minimal
+• Very slowly changing animation is not distracting
+• Absolutely no ads or tracking of any sort
+
+HOW TO USE:
+1. Install CloudPaper
+2. Long-press on your home screen
+3. Select Wallpapers → Live Wallpapers → CloudPaper
+4. Customize settings if desired (different Android versions have different ways to access wallpaper settings)
+5. Enjoy your new background

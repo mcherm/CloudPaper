@@ -7,7 +7,12 @@
       "WebSearch",
       "Bash(./gradlew clean:*)",
       "Bash(java -version:*)",
-      "Bash(brew --prefix:*)"
+      "Bash(brew --prefix:*)",
+      "Bash(tree:*)",
+      "Bash(~/Library/Android/sdk/platform-tools/adb shell screencap -p /sdcard/settings_screenshot.png)",
+      "Bash(~/Library/Android/sdk/platform-tools/adb pull /sdcard/settings_screenshot.png play_store_listing/graphics/screenshots/02_settings.png)",
+      "Bash(~/Library/Android/sdk/platform-tools/adb shell rm /sdcard/settings_screenshot.png)",
+      "Bash(mv:*)"
     ],
     "deny": [],
     "ask": []
