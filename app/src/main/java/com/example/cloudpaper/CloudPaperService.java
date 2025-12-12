@@ -40,9 +40,8 @@ public class CloudPaperService extends WallpaperService {
         // Animation parameters
         private Handler handler;
         private Runnable drawRunnable;
-        private long frameDelayMs;
         private long animationStartTime;
-        private long lastFrameMillis; // FIXME: Remove this
+        private long prevFrameMillis; // FIXME: Remove this
 
         @Override
         public void onCreate(SurfaceHolder surfaceHolder) {
@@ -61,20 +60,22 @@ public class CloudPaperService extends WallpaperService {
 
             // Initialize animation
             handler = new Handler(Looper.getMainLooper());
-            frameDelayMs = 1000 / animationSettings.framesPerSecond;
+            final long frameSpacingMillis = 1000 / animationSettings.framesPerSecond;
             animationStartTime = System.currentTimeMillis();
 
             drawRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    long newTimeMillis = System.currentTimeMillis();
-                    long elapsedMillis = newTimeMillis - lastFrameMillis;
-                    lastFrameMillis = newTimeMillis;
+                    final long newTimeMillis = System.currentTimeMillis();
+                    final long elapsedMillis = newTimeMillis - prevFrameMillis;
+                    prevFrameMillis = newTimeMillis;
                     Log.d("CloudPaper", "Beginning new run just " + elapsedMillis + " millis later.");
                     draw();
+                    final long afterDrawMillis = System.currentTimeMillis();
+                    final long frameDelay = frameSpacingMillis - (afterDrawMillis - newTimeMillis);
                     if (visible) {
-                        Log.d("CloudPaper", "Will schedule to run again in " + frameDelayMs + "ms");
-                        handler.postDelayed(this, frameDelayMs);
+                        Log.d("CloudPaper", "Will schedule to run again in " + frameDelay + "ms");
+                        handler.postDelayed(this, frameDelay);
                     }
                 }
             };

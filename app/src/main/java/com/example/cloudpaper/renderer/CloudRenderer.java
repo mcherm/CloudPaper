@@ -18,8 +18,8 @@ public class CloudRenderer {
     private final FastNoiseLite noise;
     private Bitmap cloudBitmap;
     private int[] pixels;
-    private int width;
-    private int height;
+    private int widthPixels;
+    private int heightPixels;
     private final AnimationSettings animationSettings;
 
     public CloudRenderer(AnimationSettings animationSettings) {
@@ -37,9 +37,9 @@ public class CloudRenderer {
      * Initialize or resize the cloud bitmap
      */
     public void setSurfaceSize(int width, int height) {
-        if (this.width != width || this.height != height) {
-            this.width = width;
-            this.height = height;
+        if (this.widthPixels != width || this.heightPixels != height) {
+            this.widthPixels = width;
+            this.heightPixels = height;
 
             // Create bitmap and pixel array
             cloudBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -61,10 +61,10 @@ public class CloudRenderer {
             return null;
         }
 
-        int index = 0;
+        final int blockSize = animationSettings.pixelSize;
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int y = 0; y < heightPixels; y += blockSize) {
+            for (int x = 0; x < widthPixels; x += blockSize) {
                 // Get 3D noise value with drift offsets applied
                 // x,y is screen coordinates (with drift), z is time
                 float noiseValue = noise.GetNoise(x - xOffset, y - yOffset, zOffset);
@@ -75,10 +75,11 @@ public class CloudRenderer {
 
                 final float threshold = animationSettings.cloudDensityThreshold;
 
+                final int pixelValue;
                 // Apply threshold to create sparse clouds
                 if (noiseValue < threshold) {
                     // No cloud - fully transparent
-                    pixels[index] = Color.TRANSPARENT;
+                    pixelValue = Color.TRANSPARENT;
                 } else {
                     // Cloud present - map noise to opacity
                     float cloudIntensity = (noiseValue - threshold) / (1.0f - threshold);
@@ -87,15 +88,28 @@ public class CloudRenderer {
                     int alpha = (int) (cloudIntensity * 255);
 
                     // White clouds with calculated opacity
-                    pixels[index] = Color.argb(alpha, 255, 255, 255);
+                    pixelValue = Color.argb(alpha, 255, 255, 255);
                 }
 
-                index++;
+                // We got the pixelValue, now fill it in for the whole (blockSize x blockSize) chunk
+                for (int dY = 0; dY < blockSize; dY++) {
+                    final int yPix = y + dY;
+                    if (yPix < heightPixels) {
+                        for (int dX = 0; dX < blockSize; dX++) {
+                            final int xPix = x + dX;
+                            if (xPix < widthPixels) {
+                                final int index = yPix * widthPixels + xPix;
+                                pixels[index] = pixelValue;
+                            }
+                        }
+                    }
+                }
+
             }
         }
 
         // Write pixels to bitmap
-        cloudBitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+        cloudBitmap.setPixels(pixels, 0, widthPixels, 0, 0, widthPixels, heightPixels);
 
         return cloudBitmap;
     }
