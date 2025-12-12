@@ -81,25 +81,25 @@ Create an Android live wallpaper application that displays an animated sky backg
 - [X] Deploy to device and test animation on both emulator and actual device
 
 ### Phase 5: Procedural Animation (Drift)
-- [ ] Create a parameter for rate and direction of "drift" or "wind"
-- [ ] Default to a fairly low rate of drift in an east-south-east direction
-- [ ] Use the drift parameter to offset the x and y coordinates used in generateClouds()
-- [ ] Deploy to device and test animation on both emulator and actual device
+- [X] Create a parameter for rate and direction of "drift" or "wind"
+- [X] Default to a fairly low rate of drift in an east-south-east direction
+- [X] Use the drift parameter to offset the x and y coordinates used in generateClouds()
+- [X] Deploy to device and test animation on both emulator and actual device
 
 ### Phase 6: Polish & Settings (Optional)
+- [ ] Create settings activity
+- [ ] Implement SharedPreferences integration
 - [ ] Add user preferences for each of the adjustable parameters, including
   - Animation FPS (frame rate adjustment)
   - Evolution time (how fast the Z parameter changes)
   - Drift speed (how fast clouds move)
   - Cloud density/intensity (noise threshold adjustments)
-- [ ] Create settings activity
-- [ ] Implement SharedPreferences integration
 - [ ] Deploy and test settings on device
 
 ### Phase 7: Testing & Deployment
-- [ ] Test on multiple devices/screen sizes
-- [ ] Test battery impact and performance
-- [ ] Create app icon and preview image
+- [X] Test on multiple devices/screen sizes
+- [X] Test battery impact and performance
+- [X] Create app icon and preview image
 - [ ] Prepare for Play Store (if desired)
 - [ ] Generate signed APK/AAB
 
